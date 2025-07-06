@@ -4,8 +4,8 @@ import { useTheme } from 'next-themes';
 import aiIcon from '@/assets/ai-brain-icon.png';
 
 interface HeaderProps {
-  currentView: 'classify' | 'comparison';
-  onViewChange: (view: 'classify' | 'comparison') => void;
+  currentView: 'classify' | 'comparison' | 'training';
+  onViewChange: (view: 'classify' | 'comparison' | 'training') => void;
 }
 
 export const Header = ({ currentView, onViewChange }: HeaderProps) => {
@@ -52,6 +52,14 @@ export const Header = ({ currentView, onViewChange }: HeaderProps) => {
                 className="transition-all duration-200"
               >
                 Compare Models
+              </Button>
+              <Button
+                variant={currentView === 'training' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => onViewChange('training')}
+                className="transition-all duration-200"
+              >
+                🧠 ML Training
               </Button>
             </nav>
 

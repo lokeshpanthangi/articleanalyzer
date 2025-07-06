@@ -58,7 +58,7 @@ export const VisualizationCharts = ({ result }: VisualizationChartsProps) => {
                       {modelResult.category}
                     </span>
                     <span className="font-bold text-foreground">
-                      {(modelResult.confidence * 100).toFixed(1)}%
+                      {(modelResult.confidence * 100).toFixed(2)}%
                     </span>
                   </div>
                 </div>
@@ -68,7 +68,7 @@ export const VisualizationCharts = ({ result }: VisualizationChartsProps) => {
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>Processing: {modelResult.time}ms</span>
-                  <span>Confidence: {(modelResult.confidence * 100).toFixed(1)}%</span>
+                  <span>Confidence: {(modelResult.confidence * 100).toFixed(2)}%</span>
                 </div>
               </div>
             ))}
@@ -96,7 +96,7 @@ export const VisualizationCharts = ({ result }: VisualizationChartsProps) => {
                       {item.count} model{item.count !== 1 ? 's' : ''}
                     </span>
                     <span className="font-bold text-foreground">
-                      {(item.confidence * 100).toFixed(1)}%
+                      {(item.confidence * 100).toFixed(2)}%
                     </span>
                   </div>
                 </div>
@@ -122,14 +122,14 @@ export const VisualizationCharts = ({ result }: VisualizationChartsProps) => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-background/50 rounded-lg">
               <div className="text-2xl font-bold text-foreground">
-                {Object.values(result.models).reduce((sum, model) => sum + model.confidence, 0) / 4 * 100}%
+                {(Object.values(result.models).reduce((sum, model) => sum + model.confidence, 0) / 4 * 100).toFixed(2)}%
               </div>
               <div className="text-sm text-muted-foreground">Average Confidence</div>
             </div>
             
             <div className="text-center p-4 bg-background/50 rounded-lg">
               <div className="text-2xl font-bold text-foreground">
-                {Math.max(...Object.values(result.models).map(m => m.confidence)) * 100}%
+                {(Math.max(...Object.values(result.models).map(m => m.confidence)) * 100).toFixed(2)}%
               </div>
               <div className="text-sm text-muted-foreground">Highest Confidence</div>
             </div>

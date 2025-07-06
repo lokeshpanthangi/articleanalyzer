@@ -127,7 +127,7 @@ export const ModelResults = ({ result, isLoading }: ModelResultsProps) => {
                     </div>
                   </div>
                   <Badge variant="secondary" className="text-lg font-bold">
-                    {(modelResult.confidence * 100).toFixed(1)}%
+                    {(modelResult.confidence * 100).toFixed(2)}%
                   </Badge>
                 </div>
 
@@ -136,7 +136,7 @@ export const ModelResults = ({ result, isLoading }: ModelResultsProps) => {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Confidence</span>
                     <span className="text-foreground font-medium">
-                      {(modelResult.confidence * 100).toFixed(1)}%
+                      {(modelResult.confidence * 100).toFixed(2)}%
                     </span>
                   </div>
                   <Progress 

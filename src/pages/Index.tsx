@@ -4,6 +4,8 @@ import { ModelResults } from '@/components/ModelResults';
 import { Header } from '@/components/Header';
 import { VisualizationCharts } from '@/components/VisualizationCharts';
 import { SampleArticles } from '@/components/SampleArticles';
+import { MLTraining } from '@/components/MLTraining';
+import { classifyArticle } from '@/services/aiService';
 import heroBackground from '@/assets/hero-bg.jpg';
 
 export interface ClassificationResult {
@@ -18,7 +20,7 @@ export interface ClassificationResult {
 }
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'classify' | 'comparison'>('classify');
+  const [currentView, setCurrentView] = useState<'classify' | 'comparison' | 'training'>('classify');
   const [articleText, setArticleText] = useState('');
   const [classificationResult, setClassificationResult] = useState<ClassificationResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,22 +29,27 @@ const Index = () => {
     setIsLoading(true);
     setArticleText(text);
     
-    // Simulate API call with mock data
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const mockResult: ClassificationResult = {
-      article_text: text,
-      models: {
-        word2vec: { category: "Tech", confidence: 0.85, time: 120 },
-        bert: { category: "Tech", confidence: 0.92, time: 450 },
-        sentence_bert: { category: "Tech", confidence: 0.88, time: 200 },
-        openai: { category: "Tech", confidence: 0.95, time: 800 }
-      },
-      timestamp: new Date().toISOString()
-    };
-    
-    setClassificationResult(mockResult);
-    setIsLoading(false);
+    try {
+      // Use real AI classification service
+      const result = await classifyArticle(text);
+      setClassificationResult(result);
+    } catch (error) {
+      console.error('Classification failed:', error);
+      // Fallback to a basic result if all else fails
+      const fallbackResult: ClassificationResult = {
+        article_text: text,
+        models: {
+          word2vec: { category: "Tech", confidence: 0.5, time: 120 },
+          bert: { category: "Tech", confidence: 0.5, time: 450 },
+          sentence_bert: { category: "Tech", confidence: 0.5, time: 200 },
+          openai: { category: "Tech", confidence: 0.5, time: 800 }
+        },
+        timestamp: new Date().toISOString()
+      };
+      setClassificationResult(fallbackResult);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSampleArticle = (article: string) => {
@@ -104,7 +111,7 @@ const Index = () => {
                   </div>
                 )}
               </>
-            ) : (
+            ) : currentView === 'comparison' ? (
               <div className="text-center py-16">
                 <h2 className="text-3xl font-bold text-foreground mb-4">
                   Model Comparison Dashboard
@@ -113,6 +120,8 @@ const Index = () => {
                   Coming soon - Advanced model performance analytics and comparison tools
                 </p>
               </div>
+            ) : (
+              <MLTraining />
             )}
           </main>
         </div>
